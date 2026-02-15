@@ -1,13 +1,13 @@
-from agent import agent_router
+from agent.agent import agent
 
-print("🎓 Adaptive MCP Learning Agent (Archestra Style)")
+print("🎓 Adaptive MCP Learning Agent (Archestra + Ollama)")
 print("Type 'exit' to stop\n")
 
 while True:
     user = input("You: ")
-
     if user.lower() == "exit":
         break
 
-    response = agent_router(user)
+    response = agent.run(user)
     print("Agent:", response)
+

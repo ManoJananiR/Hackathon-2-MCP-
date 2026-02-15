@@ -1,23 +1,17 @@
-from llm import ask_llm
-from mcp_client import get_roadmap, generate_quiz, track_progress, get_progress
+from archestra import Agent
+from agent.tools.gfg_tool import gfg_tool
+from agent.tools.quiz_tool import quiz_tool
+from agent.tools.roadmap_tool import roadmap_tool
 
-USER_ID = "jan"
+agent = Agent(
+    name="Adaptive MCP Learning Agent",
+    instructions="""
+You are an adaptive learning agent.
 
-def agent_router(user_input: str):
-    user_input = user_input.lower()
-
-    if "roadmap" in user_input or "learn" in user_input:
-        topic = user_input.replace("roadmap", "").replace("learn", "").strip()
-        data = get_roadmap(topic)
-        return f"📚 Roadmap for {topic}:\n{data}"
-
-    elif "quiz" in user_input:
-        topic = user_input.replace("quiz", "").strip()
-        quiz = generate_quiz(topic)
-        return quiz
-
-    elif "progress" in user_input:
-        return get_progress(USER_ID)
-
-    else:
-        return ask_llm(user_input)
+Use tools when needed:
+- Use gfg_search to fetch study materials
+- Use generate_roadmap for roadmap
+- Use generate_quiz for quizzes
+""",
+    tools=[gfg_tool, roadmap_tool, quiz_tool],
+)
