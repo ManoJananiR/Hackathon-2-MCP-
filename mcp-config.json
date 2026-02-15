@@ -1,0 +1,59 @@
+{
+  "tools": [
+    {
+      "name": "progress_upsert",
+      "description": "Track learner progress events across multiple systems",
+      "parameters": {
+        "user_id": "string",
+        "system": "string",
+        "course_id": "string",
+        "module_id": "string",
+        "progress_percent": "number",
+        "score": "number|null",
+        "time_spent_minutes": "integer"
+      }
+    },
+    {
+      "name": "content_upsert",
+      "description": "Sync content metadata from external CMS/LMS systems",
+      "parameters": {
+        "content_id": "string",
+        "source_system": "string",
+        "title": "string",
+        "skills": "string[]",
+        "difficulty": "beginner|intermediate|advanced",
+        "duration_minutes": "integer",
+        "metadata": "object"
+      }
+    },
+    {
+      "name": "generate_recommendations",
+      "description": "Generate personalized recommendations using learner profile + ML ranking",
+      "parameters": {
+        "user_id": "string",
+        "target_skill": "string|null",
+        "limit": "integer"
+      }
+    },
+    {
+      "name": "submit_assessment",
+      "description": "Submit quiz/assessment result and update learner profile",
+      "parameters": {
+        "user_id": "string",
+        "assessment_id": "string",
+        "source_system": "string",
+        "total_questions": "integer",
+        "correct_answers": "integer",
+        "skill_breakdown": "object"
+      }
+    },
+    {
+      "name": "generate_feedback",
+      "description": "Create personalized feedback and weekly plan from assessment outcomes",
+      "parameters": {
+        "user_id": "string",
+        "assessment_id": "string"
+      }
+    }
+  ]
+}
