@@ -1,60 +1,101 @@
-# Adaptive Learning MCP Server
+MCP Agent for learning from edtech platform
+1. Project Overview
 
-Adaptive learning MCP-style server for EdTech/corporate learning use cases (GeeksforGeeks-style platforms, LMS, internal training).
+An interactive learning assistant for developers and students.
 
-## Features
-- Track learner progress across multiple systems.
-- Integrate content from CMS/LMS systems.
-- Personalize recommendations with ML ranking + Groq LLM plan generation.
-- Coordinate quiz/assessment submissions and auto-generate feedback.
-- Orchestration layer using `Archestra` in Python.
+Fetches tutorials, roadmaps, and interview quizzes dynamically from GeeksforGeeks.
 
-## Stack
-- Python + FastAPI
-- Archestra orchestration (`archestra/`)
-- Groq LLM API
-- SQLite persistence (for MVP)
-- Docker + Docker Compose
+Uses Ollama LLM for natural language queries and explanations.
 
-## API Endpoints
-- `GET /health`
-- `POST /progress/upsert`
-- `POST /content/upsert`
-- `POST /recommendations/generate`
-- `POST /assessments/submit`
-- `POST /feedback/generate`
+Simple CLI interface, optional Docker deployment.
 
-## Local Run
-```bash
-python -m venv .venv
-. .venv/Scripts/activate  # Windows PowerShell: .venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-uvicorn mcp.server:app --reload --host 0.0.0.0 --port 8000
-```
+2. Key Features
 
-## Docker Run
-```bash
-docker compose up --build
-```
+Dynamic Retrieval: Fetches content directly from GFG (tutorials, roadmap, interview questions).
 
-## Environment
-Add in `.env`:
-```env
-GROQ_API_KEY=your_groq_api_key
-GROQ_MODEL=llama-3.1-8b-instant
-```
+LLM Integration: Handles queries not directly linked to GFG using Ollama.
 
-## Example Request
-```bash
-curl -X POST http://localhost:8000/progress/upsert \
-  -H "Content-Type: application/json" \
-  -d '{
-    "user_id": "u-101",
-    "system": "geeksforgeeks",
-    "course_id": "dsa",
-    "module_id": "graphs",
-    "progress_percent": 70,
-    "score": 66,
-    "time_spent_minutes": 40
-  }'
-```
+Portable: Runs locally or in Docker.
+
+Lightweight & Extensible: Easily add new topics/tools.
+
+3. Architecture
+[User CLI]  <----->  [MCP Server: FastAPI]  <----->  [GFG Tools / Ollama LLM]
+       |                     |                       |
+       |                     |----> Fetch GFG links  |
+       |                     |----> Call Ollama LLM  |
+       |                     |                       |
+       v                     v                       v
+    User Input           JSON Response           LLM-generated answer
+
+
+Flow:
+
+User types a query (e.g., "Javascript tutorial") in CLI.
+
+MCP Server checks GFG tools → returns link if found.
+
+If topic is not found → sends query to Ollama LLM for explanation.
+
+CLI displays results:
+
+{
+  "topic": "java",
+  "links": {"tutorial": "<link>", "interview": "<link>", "roadmap": "<link>"},
+  "summary": "LLM-generated answer"
+}
+
+4. How Archestra + Ollama Are Used
+
+Inspired by Archestra.ai architecture:
+
+Separation of tool retrieval and LLM reasoning.
+
+Modular design: easy to extend and maintain.
+
+Ollama: Local LLM for privacy, fast responses, natural language handling.
+
+5. Technologies
+
+Python 3.14 – Core logic.
+
+FastAPI – MCP server for queries.
+
+Requests + BeautifulSoup – Dynamic GFG scraping.
+
+Ollama LLM – Advanced query handling.
+
+Docker – Optional containerized deployment.
+
+6. How to Run
+
+Start Ollama:
+
+ollama serve
+
+
+Run MCP server:
+
+python mcp_server.py
+
+
+Run CLI agent:
+
+python main.py
+
+Ask queries:
+
+You: javascript tutorial
+You: python roadmap
+You: dsa interview
+You: exit
+
+7. Benefits
+
+Instant access to real GFG content dynamically.
+
+Can answer custom queries using Ollama LLM.
+
+Lightweight and extendable → add new topics/tools anytime.
+
+Professional-grade setup: modular, CLI + server + optional Docker.
