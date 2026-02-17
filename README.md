@@ -1,3 +1,6 @@
+Ther is a error in my demo video , while screen recording the terminal window , the chrome interface is not visible but its open when I click the link ,let me provide another video there the chrome will be visible but not the terminal.
+
+
 MCP Agent for learning from edtech platform
 1. Project Overview
 
